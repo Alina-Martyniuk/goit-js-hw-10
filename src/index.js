@@ -19,6 +19,9 @@ searchBox.addEventListener("input", debounce(searchCountry, DEBOUNCE_DELAY));
 
 function searchCountry(evt) {
     let countryName = evt.target.value.trim();
+
+    clearMarkUp();
+    
     if (countryName) {
         fetchCountries(countryName)
             .then(countries => createMarkup(countries))
@@ -51,7 +54,6 @@ function clearMarkUp() {
 }
 
 function addCountriesList(data) {
-    clearMarkUp();
     return data.map(item => `<li class="country-item">
         <div class="info-wrapper">
         <img src="${item.flags.svg}" width = 50px></img>
@@ -61,8 +63,7 @@ function addCountriesList(data) {
 }
 
 function addCountryInfo(data) {
-    clearMarkUp();
-    return markup = data.map(({ name: { official }, flags: { svg }, capital, population, languages }) => {
+    return data.map(({ name: { official }, flags: { svg }, capital, population, languages }) => {
         const countryLang = Object.values(languages).join(', ');
                             return `<li class="country-item">
                                     <div class="info-wrapper">
