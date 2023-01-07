@@ -1,6 +1,7 @@
 import './css/styles.css'
 import debounce from 'lodash.debounce'
 import Notiflix from 'notiflix'
+import fetchCountries from './fetchCountries'
 
 Notiflix.Notify.init({
     width: '500px',
@@ -29,24 +30,11 @@ function searchCountry(evt) {
 
 
 
-function fetchCountries(name) {
-
-    return fetch(`https://restcountries.com/v3.1/name/${name}?fields=name,capital,population,flags,languages
-`)
-    .then(response => {
-        if (!response.ok) {
-        throw new Error(response.statusText);
-        }
-        return response.json();
-    })
-}
-
 function createMarkup(data) {
     if (data.length > 10) {
         Notiflix.Notify.info(`Too many matches found. Please enter a more specific name.`);
     } else if (data.length === 1) {
-        countryList.innerHTML = addCountriesInfo(data);
-        console.log("data.length = 1")
+        countryList.innerHTML = addCountryInfo(data);
     } else {
         countryInfo.innerHTML = addCountriesList(data);
     }
@@ -72,16 +60,18 @@ function addCountriesList(data) {
         </li>`).join(``);
 }
 
-function addCountriesInfo(data) {
+function addCountryInfo(data) {
     clearMarkUp();
-    // const markup = data.map(({name: {official}, flags: {svg}, capital, population, languages: }) => )
-    return data.map(item => `<li class="country-item">
-        <div class="info-wrapper">
-        <img src="${item.flags.svg}" width = 50px></img>
-        <p class="country-name bold">${item.name.official}</p>  
-        </div>
-        <p>Capital: ${item.capital}</p>
-        <p>Population: ${item.population}</p>
-        <p>Languages: ${item.languages}</p>
-        </li>`).join(``);
+    return markup = data.map(({ name: { official }, flags: { svg }, capital, population, languages }) => {
+        const countryLang = Object.values(languages).join(', ');
+                            return `<li class="country-item">
+                                    <div class="info-wrapper">
+                                    <img src="${svg}" width = 50px></img>
+                                    <p class="country-name bold">${official}</p>
+                                    </div>
+                                    <p>Capital: ${capital}</p>
+                                    <p>Population: ${population}</p>
+                                    <p>Languages: ${countryLang}</p>
+                                    </li >`})
+                        .join(``);
 }
