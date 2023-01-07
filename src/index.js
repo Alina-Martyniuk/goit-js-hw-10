@@ -21,14 +21,14 @@ function searchCountry(evt) {
     let countryName = evt.target.value.trim();
 
     clearMarkUp();
-    
-    if (countryName) {
-        fetchCountries(countryName)
-            .then(countries => createMarkup(countries))
-            .catch(() => createErrorMessage())
-    } else {
-        clearMarkUp();
+
+    if (!countryName) {
+        return
     }
+    
+    fetchCountries(countryName)
+        .then(countries => createMarkup(countries))
+        .catch(() => createErrorMessage())
 }
 
 
